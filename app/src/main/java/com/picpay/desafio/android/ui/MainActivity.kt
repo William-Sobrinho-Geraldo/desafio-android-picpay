@@ -36,8 +36,9 @@ class MainActivity : AppCompatActivity() {
 
         mostrarProgresCarregando()
 
-        viewModel.getUsers(this)
+
         observarSucessoDaRequisição()
+        viewModel.getUsers()
 
     }
 
