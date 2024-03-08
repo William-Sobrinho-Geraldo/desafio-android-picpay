@@ -11,6 +11,7 @@ fun mostrarToast(message: String, context: Context) {
 }
 
 
+
 fun limparMensagemError(texto: String): String? {
     // Utilizando expressão regular para extrair a mensagem entre as aspas
     val pattern: Pattern = Pattern.compile("\"error\":\"([^\"]*)\"")

@@ -2,61 +2,54 @@ package com.picpay.desafio.android.repository
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.picpay.desafio.android.api.RetrofitConfiguration
 import com.picpay.desafio.android.api.models.User
 import com.picpay.desafio.android.api.service.PicPayService
-import com.picpay.desafio.android.cache.AppDatabase
 import com.picpay.desafio.android.cache.UserDao
+import com.picpay.desafio.android.utilidades.mostrarToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.core.context.GlobalContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.IOException
 
 class Repository(private val service: PicPayService, private val dao: UserDao) {
 
-// aqui eu devo decidir se pego dados locais ou chamo service
 
+    suspend fun getUsers(context: Context): List<User> {
 
-    suspend fun getUsers(): List<User> {
         return withContext(Dispatchers.IO) {
-            val retorno = mutableListOf<User>()
+            val listaDeUsers = mutableListOf<User>()
+            val listaDeUsersLocais = dao.listar5PrimeirosUsuarios()
 
-            // Verifica se há dados locais (se necessário)
+            if (listaDeUsersLocais.isNotEmpty()) {
+                listaDeUsers.addAll(listaDeUsersLocais)
+                withContext(Dispatchers.Main) { mostrarToast("Usando dados cacheados", context) }
+                Log.i("Repository", "Usando dados cacheados:  ${listaDeUsersLocais[0]} ")
+            } else {
 
-            try {
-                val response = service.getUsers().execute()
+                try {
+                    val response = service.getUsers().execute()
 
-                if (response.isSuccessful) {
-                    val listaDeUsersRemota = response.body()
+                    if (response.isSuccessful) {
+                        val listaDeUsersRemota = response.body()
 
-                    // Insira a lista de usuários remota no banco de dados (se necessário)
+                        // Insira a lista de usuários remota no banco de dados (se necessário)
 
-                    listaDeUsersRemota?.let {
-                        retorno.addAll(listaDeUsersRemota)
-                        dao.inserirListaDeUser(listaDeUsersRemota)
+                        listaDeUsersRemota?.let {
+                            listaDeUsers.addAll(listaDeUsersRemota)
+                            dao.inserirListaDeUser(listaDeUsersRemota)
+                            withContext(Dispatchers.Main) { mostrarToast("Dados do Servidor", context) }
+                            Log.i("Repository", "Usando dados do Servidor")
+
+                        }
+                    } else {
+                        // Trate a falha da chamada (se necessário)
                     }
-                } else {
-                    // Trate a falha da chamada (se necessário)
+                } catch (e: IOException) {
+                    // Trate erros de rede ou de execução (se necessário)
                 }
-            } catch (e: IOException) {
-                // Trate erros de rede ou de execução (se necessário)
             }
 
-            retorno
+            listaDeUsers
         }
-
-
-
-
-
-
-
-
-
 
 
 //        val retorno = mutableListOf(User("", "", 0, ""))

@@ -13,10 +13,12 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun inserirListaDeUser( listaDeUsers : List<User>)
 
-    @Query("SELECT * FROM tabela_de_usuarios LIMIT 10")
-    fun listar10PrimeirosUsuarios(): List<User>
+    @Query("SELECT * FROM tabela_de_usuarios LIMIT 5")
+    fun listar5PrimeirosUsuarios(): List<User>
 
     @Query("SELECT * FROM tabela_de_usuarios")
      fun listarTodosUsuarios(): List<User>
 
+    @Query("DELETE FROM tabela_de_usuarios")
+    fun deletarBancoDeDados()
 }

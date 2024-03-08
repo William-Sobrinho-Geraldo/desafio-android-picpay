@@ -18,9 +18,9 @@ class MainActivityViewModel(
     var successGetUsers = MutableLiveData<List<User>>()
 
 
-    fun getUsers() {
+    fun getUsers(context: Context) {
         viewModelScope.launch {
-            val usersList = repository.getUsers()
+            val usersList = repository.getUsers(context)
             successGetUsers.postValue(usersList)
         }
 
