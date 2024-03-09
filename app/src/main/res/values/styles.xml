@@ -14,4 +14,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="DialogFullscreen" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@color/black_transparent</item>
+    </style>
+
+
 </resources>
