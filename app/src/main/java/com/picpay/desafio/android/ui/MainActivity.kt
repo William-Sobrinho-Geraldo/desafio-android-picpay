@@ -72,7 +72,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun selecionarLayout() {
         binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(root) }
-
     }
 
     private fun inicializarVariaveis() {
@@ -86,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun mostrarProgresCarregando() {
+    fun mostrarProgresCarregando() {
         progressBar.visibility = View.VISIBLE
     }
 

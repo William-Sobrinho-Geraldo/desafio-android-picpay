@@ -64,6 +64,7 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
     implementation "com.google.dagger:dagger:$dagger_version"
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -102,5 +103,8 @@ dependencies {
     kapt "androidx.room:room-compiler:2.4.1"
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    testImplementation "io.mockk:mockk:1.12.2"
+    androidTestImplementation "io.mockk:mockk-android:1.12.2"
 
 }

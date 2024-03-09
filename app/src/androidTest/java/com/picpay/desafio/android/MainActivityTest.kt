@@ -1,18 +1,26 @@
 package com.picpay.desafio.android
 
+import android.view.View
+import android.widget.ProgressBar
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.picpay.desafio.android.ui.MainActivity
+import junit.framework.TestCase.assertEquals
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
 
 
 class MainActivityTest {
@@ -66,4 +74,22 @@ class MainActivityTest {
 
         private val errorResponse by lazy { MockResponse().setResponseCode(404) }
     }
+
+    @Rule
+    @JvmField
+    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+
+    @Test
+    fun deveMostrarProgressBar() {
+        activityRule.scenario.onActivity { activity ->
+            //Simula que está mostrando a progress
+            activity.mostrarProgresCarregando()
+
+            //Agora verifica se a progress está visível
+            val progressBar = activity.findViewById<ProgressBar>(R.id.user_list_progress_bar)
+            assertEquals(View.VISIBLE, progressBar.visibility)
+        }
+    }
+
+
 }
