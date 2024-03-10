@@ -9,14 +9,12 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.picpay.desafio.android.api.models.User
 import com.picpay.desafio.android.databinding.ActivityMainBinding
 import com.picpay.desafio.android.ui.adapters.UserListAdapter
 import com.picpay.desafio.android.ui.viewModels.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.swipeRefreshLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-var bancoDadosDeletado = false
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,36 +34,56 @@ class MainActivity : AppCompatActivity() {
 
         configRecyclerView()
 
-        configListeners()
+        configListenerBtnLimparBDLocal()
+
+        configListenerSwipeRefresh()
 
     }
 
 
     override fun onResume() {
         super.onResume()
-        Log.i("MainActivity", "onResume: Acabei de entrar em onResume da MainActivity")
         mostrarProgresCarregando()
 
-        observarSucessoDaRequisição()
-        viewModel.getUsers(this)
+        observarSucessoRequisição()
+
+        fazerRequisição()
+    }
+
+
+
+    private fun observarSucessoRequisição(){
+        viewModel.successGetUsers.observe(this){ listaDeUsuarios ->
+            adapter.users = listaDeUsuarios
+            progressBar.visibility = View.GONE
+        }
 
     }
 
-    private fun configListeners() {
-        binding.btnLimparBDLocal.setOnClickListener {
-            DialogDelete(adapter).show(supportFragmentManager, "dialogTermos")
-        }
-
-
+    private fun configListenerSwipeRefresh() {
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getUsers(this)
+            fazerRequisição()
             removerProgressApos1s()
         }
     }
 
-    private fun removerProgressApos1s() {
+    private fun fazerRequisição() {
+        viewModel.getUsers(this)
+    }
+
+    fun configListenerBtnLimparBDLocal() {
+        binding.btnLimparBDLocal.setOnClickListener {
+            DialogDelete(adapter).show(supportFragmentManager, "dialogDelete")
+        }
+    }
+
+    fun removerProgressApos1s() {
         Handler(Looper.getMainLooper()).postDelayed({
             swipeRefreshLayout.isRefreshing = false
+            Log.i(
+                "MainActivity",
+                "Na função REMOVER -> O swipeRefresh está atualizando?  ${binding.swipeRefreshLayout.isRefreshing}  "
+            )
         }, 1200)
     }
 
@@ -85,17 +103,8 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    fun mostrarProgresCarregando() {
+    fun mostrarProgresCarregando() {            //TESTE FEITO
         progressBar.visibility = View.VISIBLE
-    }
-
-    private fun observarSucessoDaRequisição() {
-        viewModel.successGetUsers.observe(this) { listUsers ->
-
-            progressBar.visibility = View.GONE
-            adapter.users = listUsers
-
-        }
     }
 
 }

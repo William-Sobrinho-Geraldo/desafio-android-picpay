@@ -14,10 +14,10 @@ interface UserDao {
     fun inserirListaDeUser( listaDeUsers : List<User>)
 
     @Query("SELECT * FROM tabela_de_usuarios LIMIT 5")
-    fun listar5PrimeirosUsuarios(): List<User>
+    fun listar5PrimeirosUsuarios(): List<User>?
 
     @Query("SELECT * FROM tabela_de_usuarios")
-     fun listarTodosUsuarios(): List<User>
+     fun listarTodosUsuarios(): List<User>?
 
     @Query("DELETE FROM tabela_de_usuarios")
     fun deletarBancoDeDados()

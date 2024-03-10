@@ -8,10 +8,16 @@
       <entry key="app">
         <State />
       </entry>
-      <entry key="shouldDisplayListItem()">
+      <entry key="deveMostrarDialogDeleteAoClicarNoBotãoDeleteBD()">
         <State />
       </entry>
-      <entry key="shouldDisplayTitle()">
+      <entry key="deveMostrarProgressBar()">
+        <State />
+      </entry>
+      <entry key="deveRemoverProgressBarApos1s()">
+        <State />
+      </entry>
+      <entry key="testRemoverProgressApos1s()">
         <State />
       </entry>
     </value>

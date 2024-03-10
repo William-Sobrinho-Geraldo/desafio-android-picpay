@@ -6,23 +6,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.picpay.desafio.android.api.models.User
 import com.picpay.desafio.android.repository.Repository
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class MainActivityViewModel(
-    private val repository: Repository
-) : ViewModel() {
+class MainActivityViewModel(private val repository: Repository) : ViewModel() {
 
-
-    var successGetUsers = MutableLiveData<List<User>>()
-
+    private val _successGetUsers = MutableLiveData<List<User>>()
+    var successGetUsers = _successGetUsers
 
     fun getUsers(context: Context) {
         viewModelScope.launch {
-            val usersList = repository.getUsers(context)
-            successGetUsers.postValue(usersList)
+            repository.getUsers(context).collect { listaDeUsuarios ->
+                _successGetUsers.postValue(listaDeUsuarios)
+            }
         }
-
     }
-
-
 }
